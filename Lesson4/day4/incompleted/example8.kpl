@@ -1,0 +1,14 @@
+Program Example_8;  (* Example 8 *)
+Var
+i : integer;
+str : array (. 10 .) of char;
+Begin
+i := i % 4;
+i += 4;
+i -= 4;
+i *= 4;
+i /= 4;
+str := "Ha Noi"; (* correct *)
+(* str /= "Ha Noi"; (* semantic error *)
+str := "Ha Noi University of Science Technology 2021 2022"; (* semantics exceed *)
+End.  (* Example 8 *)
