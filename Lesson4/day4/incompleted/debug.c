@@ -21,6 +21,9 @@ void printType(Type *type)
   case TP_INT:
     printf("Int");
     break;
+  case TP_FLOAT:
+    printf("Float");
+    break;
   case TP_CHAR:
     printf("Char");
     break;

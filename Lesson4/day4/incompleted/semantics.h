@@ -19,11 +19,12 @@ Object *checkDeclaredProcedure(char *name);
 Object *checkDeclaredLValueIdent(char *name);
 
 void checkIntType(Type *type);
+void checkFloatType(Type *type);
 void checkCharType(Type *type);
 void checkArrayType(Type *type);
 void checkBasicType(Type *type);
 void checkTypeEquality(Type *type1, Type *type2);
 void checkModulType(Type *type);
-void checkString(Type *type);
+void checkForStType(Type *type);
 
 #endif

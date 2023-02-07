@@ -16,7 +16,7 @@ struct ErrorMessage
   char *message;
 };
 
-struct ErrorMessage errors[34] = {
+struct ErrorMessage errors[35] = {
     {ERR_END_OF_COMMENT, "End of comment expected."},
     {ERR_IDENT_TOO_LONG, "Identifier too long."},
     {ERR_INVALID_CONSTANT_CHAR, "Invalid char constant."},
@@ -45,11 +45,12 @@ struct ErrorMessage errors[34] = {
     {ERR_UNDECLARED_PROCEDURE, "Undeclared procedure."},
     {ERR_DUPLICATE_IDENT, "Duplicate identifier."},
     {ERR_TYPE_INCONSISTENCY, "Type inconsistency"},
-    {ERR_PARAMETERS_ARGUMENTS_INCONSISTENCY, "The number of arguments and the number of parameters are inconsistent."},
-    {ERR_MODUL_ONLY_INTEGER, "MODUL OPERATOR WORK ONLY WITH INTEGER."},
-    {ERR_INVALID_STRING, "Invalid string."},
+    {ERR_PARAMETERS_ARGUMENTS_INCONSISTENCY, "The number of arguments and the number of parameters are inconsistent"},
+    {ERR_MODUL_ONLY_INTEGER, "Modul operator work only with integer"},
+    {ERR_INVALID_STRING, "Invalid string"},
     {ERR_EXCESS_STRING, "String excess by larger const"},
     {ERR_STRING_USED, "Only assign string by one token"},
+    {ERR_USE_FLOAT_FOR_STATEMENT, "Don't use floating point number in for statement"},
 };
 
 void error(ErrorCode err, int lineNo, int colNo)

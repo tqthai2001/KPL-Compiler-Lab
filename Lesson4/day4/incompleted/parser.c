@@ -233,6 +233,10 @@ ConstantValue *compileUnsignedConstant(void)
     eat(TK_NUMBER);
     constValue = makeIntConstant(currentToken->value);
     break;
+  case TK_FLOAT:
+    eat(TK_FLOAT);
+    constValue = makeFloatConstant(currentToken->value);
+    break;
   case TK_IDENT:
     eat(TK_IDENT);
 
@@ -288,10 +292,16 @@ ConstantValue *compileConstant2(void)
     eat(TK_NUMBER);
     constValue = makeIntConstant(currentToken->value);
     break;
+  case TK_FLOAT:
+    eat(TK_FLOAT);
+    constValue = makeFloatConstant(currentToken->value);
+    break;
   case TK_IDENT:
     eat(TK_IDENT);
     obj = checkDeclaredConstant(currentToken->string);
     if (obj->constAttrs->value->type == TP_INT)
+      constValue = duplicateConstantValue(obj->constAttrs->value);
+    else if (obj->constAttrs->value->type == TP_FLOAT)
       constValue = duplicateConstantValue(obj->constAttrs->value);
     else
       error(ERR_UNDECLARED_INT_CONSTANT, currentToken->lineNo, currentToken->colNo);
@@ -316,6 +326,10 @@ Type *compileType(void)
     eat(KW_INTEGER);
     type = makeIntType();
     break;
+  case KW_FLOAT:
+    eat(KW_FLOAT);
+    type = makeFloatType();
+    break;
   case KW_CHAR:
     eat(KW_CHAR);
     type = makeCharType();
@@ -324,9 +338,7 @@ Type *compileType(void)
     eat(KW_ARRAY);
     eat(SB_LSEL);
     eat(TK_NUMBER);
-
     arraySize = currentToken->value;
-
     eat(SB_RSEL);
     eat(KW_OF);
     elementType = compileType();
@@ -353,6 +365,10 @@ Type *compileBasicType(void)
   case KW_INTEGER:
     eat(KW_INTEGER);
     type = makeIntType();
+    break;
+  case KW_FLOAT:
+    eat(KW_FLOAT);
+    type = makeFloatType();
     break;
   case KW_CHAR:
     eat(KW_CHAR);
@@ -569,6 +585,7 @@ void compileForSt(void)
   // check if the identifier is a variable
   Object *var = checkDeclaredVariable(currentToken->string);
   Type *t1 = var->varAttrs->type;
+  checkForStType(t1);
   eat(SB_ASSIGN);
   checkTypeEquality(t1, compileExpression());
 
@@ -834,6 +851,10 @@ Type *compileFactor(void)
     eat(TK_NUMBER);
     return makeIntType();
     break;
+  case TK_FLOAT:
+    eat(TK_FLOAT);
+    return makeFloatType();
+    break;
   case TK_CHAR:
     eat(TK_CHAR);
     return makeCharType();
@@ -856,6 +877,8 @@ Type *compileFactor(void)
       {
       case TP_INT:
         return makeIntType();
+      case TP_FLOAT:
+        return makeFloatType();
       case TP_CHAR:
         return makeCharType();
       default:

@@ -2,16 +2,23 @@ Program Example_10;  (* Example 10 *)
 Var
 i : integer;
 str : array (. 10 .) of char;
-(* f : float; *)
+f : float;
 Begin
+i := i + 5;
+f := 1.5;
+f := 3.1416 + 2.7128;
+for f := 1.25 to 5.25 do call writef(f); (* semantic error *)
+f += 4.;
+f -= 4.;
+f *= 4.;
+f /= 4.;
 i := i % 4;
 i += 4;
 i -= 4;
 i *= 4;
 i /= 4;
+for i := 1 to 5 do call writei(i);
 str := "Ha Noi"; (* correct *)
-str /= "Ha Noi"; (* semantic error *)
-str := "Ha Noi University of Science Technology 2021 2022"; (* semantics exceed *)
-f := 3.1416 + 2.7128;
-for f := 1.25 to 5.6 do writef(f); (* semantic error *)
+(* str /= "Ha Noi"; (* semantic error *)
+(* str := "Ha Noi University of Science Technology 2021 2022"; (* semantics exceed *)
 End.  (* Example 10 *)

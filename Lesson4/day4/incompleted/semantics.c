@@ -122,11 +122,6 @@ Object *checkDeclaredLValueIdent(char *name)
 
   return obj;
 }
-
-void checkString(Type *type)
-{
-}
-
 void checkModulType(Type *type)
 {
   if ((type != NULL) && (type->typeClass == TP_INT))
@@ -136,10 +131,27 @@ void checkModulType(Type *type)
     error(ERR_MODUL_ONLY_INTEGER, currentToken->lineNo, currentToken->colNo);
   }
 }
+
+void checkForStType(Type *type)
+{
+  if (((type->typeClass != TP_CHAR) && (type->typeClass != TP_INT)) || (type->typeClass == TP_FLOAT))
+    error(ERR_USE_FLOAT_FOR_STATEMENT, currentToken->lineNo, currentToken->colNo);
+  return;
+}
+
 void checkIntType(Type *type)
 {
-  // TODO
-  if ((type != NULL) && (type->typeClass == TP_INT))
+  if ((type != NULL) && ((type->typeClass == TP_INT) || (type->typeClass == TP_FLOAT)))
+    return;
+  else if (type->typeClass == TP_STRING)
+    error(ERR_STRING_USED, currentToken->lineNo, currentToken->colNo);
+  else
+    error(ERR_TYPE_INCONSISTENCY, currentToken->lineNo, currentToken->colNo);
+}
+
+void checkFloatType(Type *type)
+{
+  if ((type != NULL) && (type->typeClass == TP_FLOAT))
     return;
   else if (type->typeClass == TP_STRING)
     error(ERR_STRING_USED, currentToken->lineNo, currentToken->colNo);
@@ -149,7 +161,6 @@ void checkIntType(Type *type)
 
 void checkCharType(Type *type)
 {
-  // TODO
   if ((type != NULL) && (type->typeClass == TP_CHAR))
     return;
   else
@@ -158,8 +169,7 @@ void checkCharType(Type *type)
 
 void checkBasicType(Type *type)
 {
-  // TODO
-  if ((type != NULL) && ((type->typeClass == TP_INT) || (type->typeClass == TP_CHAR)))
+  if ((type != NULL) && ((type->typeClass == TP_INT) || (type->typeClass == TP_FLOAT) || (type->typeClass == TP_CHAR)))
     return;
   else
     error(ERR_TYPE_INCONSISTENCY, currentToken->lineNo, currentToken->colNo);

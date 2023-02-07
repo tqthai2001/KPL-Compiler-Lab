@@ -44,6 +44,7 @@ typedef enum
   ERR_INVALID_STRING,
   ERR_EXCESS_STRING,
   ERR_STRING_USED,
+  ERR_USE_FLOAT_FOR_STATEMENT,
 } ErrorCode;
 
 void error(ErrorCode err, int lineNo, int colNo);
