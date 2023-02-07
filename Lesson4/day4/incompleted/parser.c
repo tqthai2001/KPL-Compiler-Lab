@@ -710,7 +710,7 @@ Type *compileExpression2(void)
 {
   Type *type;
   type = compileTerm();
-  if (lookAhead->tokenType == SB_MODUL)
+  if (lookAhead->tokenType == SB_MOD)
   {
     checkModulType(type);
   }
@@ -736,10 +736,8 @@ void compileExpression3(void)
     checkIntType(type);
     compileExpression3();
     break;
-  case SB_MODUL:
-    // assert("Da doc duoc SB_MODUL");
-
-    eat(SB_MODUL);
+  case SB_MOD:
+    eat(SB_MOD);
     type = compileTerm();
     // checkIntType(type);
     checkModulType(type);
@@ -798,7 +796,7 @@ void compileTerm2(void)
     compileTerm2();
     break;
     // check the FOLLOW set
-  case SB_MODUL:
+  case SB_MOD:
   case SB_PLUS:
   case SB_MINUS:
   case KW_TO:
@@ -812,7 +810,7 @@ void compileTerm2(void)
   case SB_GE:
   case SB_GT:
   case SB_RSEL:
-  case SB_CLOSE_BRACKET:
+  case SB_RBRACKET:
   case SB_SEMICOLON:
   case KW_END:
   case KW_ELSE:

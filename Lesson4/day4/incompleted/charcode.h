@@ -9,30 +9,30 @@
 
 typedef enum
 {
-  CHAR_SPACE, // ' '
+  CHAR_SPACE,
   CHAR_LETTER,
   CHAR_DIGIT,
-  CHAR_PLUS,         // '+'
-  CHAR_MINUS,        // '-'
-  CHAR_TIMES,        // '*'
-  CHAR_SLASH,        // '/'
-  CHAR_LT,           // '<'
-  CHAR_GT,           // '>'
-  CHAR_EXCLAIMATION, // '!'
-  CHAR_EQ,           // '='
-  CHAR_COMMA,        // ','
-  CHAR_PERIOD,       // '.'
-  CHAR_COLON,        // ':'
-  CHAR_SEMICOLON,    // ';'
-  CHAR_SINGLEQUOTE,  // '
-  CHAR_LPAR,         // '('
-  CHAR_RPAR,         // ')'
-  CHAR_UNDERSCORE,   // '_'
-  CHAR_LSB,          // '['
-  CHAR_RSB,          // ']'
-  CHAR_MODUL,        // '%'
+  CHAR_PLUS,
+  CHAR_MINUS,
+  CHAR_TIMES,
+  CHAR_SLASH,
+  CHAR_LT,
+  CHAR_GT,
+  CHAR_EXCLAIMATION,
+  CHAR_EQ,
+  CHAR_COMMA,
+  CHAR_PERIOD,
+  CHAR_COLON,
+  CHAR_SEMICOLON,
+  CHAR_SINGLEQUOTE,
+  CHAR_LPAR,
+  CHAR_RPAR,
+  CHAR_UNDERSCORE,
+  CHAR_LBRACKET,
+  CHAR_RBRACKET,
+  CHAR_MOD,
   CHAR_UNKNOWN,
-  CHAR_DOUBLEQUOTE, // ""
+  CHAR_DOUBLEQUOTE,
 } CharCode;
 
 #endif

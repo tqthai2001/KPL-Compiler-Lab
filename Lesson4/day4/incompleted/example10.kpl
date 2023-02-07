@@ -1,7 +1,8 @@
-Program Example_8;  (* Example 8 *)
+Program Example_10;  (* Example 10 *)
 Var
 i : integer;
 str : array (. 10 .) of char;
+(* f : float; *)
 Begin
 i := i % 4;
 i += 4;
@@ -9,6 +10,8 @@ i -= 4;
 i *= 4;
 i /= 4;
 str := "Ha Noi"; (* correct *)
-(* str /= "Ha Noi"; (* semantic error *)
+str /= "Ha Noi"; (* semantic error *)
 str := "Ha Noi University of Science Technology 2021 2022"; (* semantics exceed *)
-End.  (* Example 8 *)
+f := 3.1416 + 2.7128;
+for f := 1.25 to 5.6 do writef(f); (* semantic error *)
+End.  (* Example 10 *)

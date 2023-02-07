@@ -62,7 +62,7 @@ Token *readIdentKeyword(void)
   readChar();
 
   while ((currentChar != EOF) &&
-         ((charCodes[currentChar] == CHAR_LETTER) || (charCodes[currentChar] == CHAR_DIGIT) || (charCodes[currentChar] == CHAR_UNDERSCORE)))
+         ((charCodes[currentChar] == CHAR_UNDERSCORE) || (charCodes[currentChar] == CHAR_LETTER) || (charCodes[currentChar] == CHAR_DIGIT)))
   {
     if (count <= MAX_IDENT_LEN)
       token->string[count++] = toupper((char)currentChar);
@@ -94,19 +94,21 @@ Token *readNumber(void)
     token->string[count++] = (char)currentChar;
     readChar();
   }
-  // if(charCodes[currentChar] == CHAR_PERIOD) {
-  //   token->tokenType = TK_FLOAT;
-  //   token->string[count++] = (char) currentChar;
-  //   readChar();
-  //   while ((currentChar != EOF) && (charCodes[currentChar] == CHAR_DIGIT)) {
-  //     token->string[count++] = (char)currentChar;
-  //     readChar();
-  //   }
-  // }
+  if (charCodes[currentChar] == CHAR_PERIOD)
+  {
+    token->tokenType = TK_FLOAT;
+    token->string[count++] = (char)currentChar;
+    readChar();
+    while ((currentChar != EOF) && (charCodes[currentChar] == CHAR_DIGIT))
+    {
+      token->string[count++] = (char)currentChar;
+      readChar();
+    }
+  }
 
   token->string[count] = '\0';
-  // if(token->tokenType == TK_NUMBER)
-  token->value = atoi(token->string);
+  if (token->tokenType == TK_NUMBER)
+    token->value = atoi(token->string);
   return token;
 }
 
@@ -173,6 +175,7 @@ Token *getToken(void)
 {
   Token *token;
   int ln = lineNo, cn = colNo;
+
   if (currentChar == EOF)
     return makeToken(TK_EOF, lineNo, colNo);
 
@@ -217,9 +220,9 @@ Token *getToken(void)
       return makeToken(SB_ASSIGN_DIVIDE, ln, cn);
     }
     return makeToken(SB_SLASH, ln, cn);
-  case CHAR_MODUL:
+  case CHAR_MOD:
     readChar();
-    return makeToken(SB_MODUL, ln, cn);
+    return makeToken(SB_MOD, ln, cn);
   case CHAR_LT:
     ln = lineNo;
     cn = colNo;
@@ -229,8 +232,7 @@ Token *getToken(void)
       readChar();
       return makeToken(SB_LE, ln, cn);
     }
-    else
-      return makeToken(SB_LT, ln, cn);
+    return makeToken(SB_LT, ln, cn);
   case CHAR_GT:
     ln = lineNo;
     cn = colNo;
@@ -240,8 +242,7 @@ Token *getToken(void)
       readChar();
       return makeToken(SB_GE, ln, cn);
     }
-    else
-      return makeToken(SB_GT, ln, cn);
+    return makeToken(SB_GT, ln, cn);
   case CHAR_EQ:
     token = makeToken(SB_EQ, lineNo, colNo);
     readChar();
@@ -289,12 +290,10 @@ Token *getToken(void)
       readChar();
       return makeToken(SB_ASSIGN, ln, cn);
     }
-    else
-      return makeToken(SB_COLON, ln, cn);
+    return makeToken(SB_COLON, ln, cn);
   case CHAR_SINGLEQUOTE:
     return readConstChar();
   case CHAR_DOUBLEQUOTE:
-    //  printf("da scanner duoc doublequote -> string \n");
     return readString();
   case CHAR_LPAR:
     ln = lineNo;
@@ -366,7 +365,9 @@ void printToken(Token *token)
   case TK_FLOAT:
     printf("TK_FLOAT(%s)\n", token->string);
     break;
-    // case TK_STRING: printf("TK_STRING(\"%s\")\n", token->string); break;
+  case TK_STRING:
+    printf("TK_STRING(\"%s\")\n", token->string);
+    break;
 
   case KW_PROGRAM:
     printf("KW_PROGRAM\n");
@@ -427,6 +428,9 @@ void printToken(Token *token)
     break;
   case KW_TO:
     printf("KW_TO\n");
+    break;
+  case KW_FLOAT:
+    printf("KW_FLOAT\n");
     break;
 
   case SB_SEMICOLON:
@@ -498,14 +502,14 @@ void printToken(Token *token)
   case SB_ASSIGN_DIVIDE:
     printf("SB_ASSIGN_DIVIDE\n");
     break;
-  case SB_MODUL:
-    printf("SB_MODUL\n");
+  case SB_MOD:
+    printf("SB_MOD\n");
     break;
-  case SB_OPEN_BRACKET:
-    printf("SB_OPEN_BRACKET\n");
+  case SB_LBRACKET:
+    printf("SB_LBRACKET\n");
     break;
-  case SB_CLOSE_BRACKET:
-    printf("SB_CLOSE_BRACKET\n");
+  case SB_RBRACKET:
+    printf("SB_RBRACKET\n");
     break;
   }
 }

@@ -7,7 +7,7 @@
 #ifndef __TOKEN_H__
 #define __TOKEN_H__
 
-#define MAX_IDENT_LEN 1000
+#define MAX_IDENT_LEN 999
 #define KEYWORDS_COUNT 21
 
 typedef enum
@@ -65,9 +65,9 @@ typedef enum
   SB_ASSIGN_SUBSTRACT,
   SB_ASSIGN_TIMES,
   SB_ASSIGN_DIVIDE,
-  SB_MODUL,
-  SB_OPEN_BRACKET,
-  SB_CLOSE_BRACKET,
+  SB_MOD,
+  SB_LBRACKET,
+  SB_RBRACKET,
 } TokenType;
 
 typedef struct
