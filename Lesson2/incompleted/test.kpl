@@ -1,0 +1,15 @@
+Program Example_10; (* Example_10 *)
+var i : integer;
+var c : char;
+str : array (. 50 .) of char;
+f : float;
+Begin
+i := i % 4;
+c := 'T';
+i += 4;
+i -= 4;
+i *= 4;
+i /= 4;
+str := "Ha Noi University of Science and Technology Science and Technology";
+f := 3.1416 + 2.7128;
+End. (* Example_10 *)

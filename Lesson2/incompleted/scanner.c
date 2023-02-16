@@ -6,7 +6,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
 #include "reader.h"
 #include "charcode.h"
@@ -21,94 +20,99 @@ extern CharCode charCodes[];
 
 /***************************************************************/
 
-void skipBlank(void)
+void skipBlank()
 {
-  while (currentChar != EOF && charCodes[currentChar] == CHAR_SPACE)
-  {
+  while ((currentChar != EOF) && (charCodes[currentChar] == CHAR_SPACE))
     readChar();
-  }
 }
 
-void skipComment(void)
+void skipComment()
 {
-  // currentChar = '*'
-  int isEndOfComment = 0;
-  int prevChar = 0;
-  readChar();
-  while (currentChar != EOF && !isEndOfComment)
+  int state = 0;
+  while ((currentChar != EOF) && (state < 2))
   {
-    if (charCodes[currentChar] == CHAR_RPAR && charCodes[prevChar] == CHAR_TIMES)
+    switch (charCodes[currentChar])
     {
-      isEndOfComment = 1;
+    case CHAR_TIMES:
+      state = 1;
       break;
+    case CHAR_RPAR:
+      if (state == 1)
+        state = 2;
+      else
+        state = 0;
+      break;
+    default:
+      state = 0;
     }
-    prevChar = currentChar;
     readChar();
   }
-  if (!isEndOfComment)
-  {
+  if (state != 2)
     error(ERR_ENDOFCOMMENT, lineNo, colNo);
-  }
-  else
-  {
-    readChar();
-  }
 }
 
 Token *readIdentKeyword(void)
 {
-  // Read token and store
-  Token *token = makeToken(TK_IDENT, lineNo, colNo);
-  int i = 0;
-  while (charCodes[currentChar] == CHAR_LETTER || charCodes[currentChar] == CHAR_DIGIT)
+  Token *token = makeToken(TK_NONE, lineNo, colNo);
+  int count = 1;
+
+  token->string[0] = (char)currentChar;
+  readChar();
+
+  while ((currentChar != EOF) &&
+         ((charCodes[currentChar] == CHAR_LETTER) || (charCodes[currentChar] == CHAR_DIGIT)))
   {
-    token->string[i] = currentChar;
+    if (count <= MAX_IDENT_LEN)
+      token->string[count++] = (char)currentChar;
     readChar();
-    i++;
   }
-  token->string[i] = '\0';
-  // Check the length of the token and check if token is keyword or not
-  if (i >= MAX_IDENT_LEN)
+
+  if (count > MAX_IDENT_LEN)
   {
-    error(ERR_IDENTTOOLONG, lineNo, colNo);
+    error(ERR_IDENTTOOLONG, token->lineNo, token->colNo);
+    return token;
   }
-  else
-  {
-    TokenType type = checkKeyword(token->string);
-    if (type != TK_NONE)
-    {
-      token->tokenType = type;
-    }
-  }
+
+  token->string[count] = '\0';
+  token->tokenType = checkKeyword(token->string); // return TokenType if type is Keyword, if not type still NONE that means it is IDENT
+
+  if (token->tokenType == TK_NONE)
+    token->tokenType = TK_IDENT;
+
   return token;
 }
 
 Token *readNumber(void)
 {
-  // currentChar is a number
   Token *token = makeToken(TK_NUMBER, lineNo, colNo);
-
+  int count = 0;
   int numDot = 0;
-  int i = 0;
-  while (charCodes[currentChar] == CHAR_DIGIT || (charCodes[currentChar] == CHAR_PERIOD && numDot == 0))
+  while ((currentChar != EOF) && (charCodes[currentChar] == CHAR_DIGIT || charCodes[currentChar] == CHAR_PERIOD))
   {
     if (charCodes[currentChar] == CHAR_PERIOD)
     {
-      numDot++;
+      token->tokenType = TK_FLOAT;
+      numDot += 1;
     }
-    token->string[i] = currentChar;
+
+    if (numDot > 1)
+    {
+      token->tokenType = TK_NONE;
+      error(ERR_INVALIDSYMBOL, token->lineNo, token->colNo);
+    }
+
+    token->string[count++] = (char)currentChar;
     readChar();
-    i++;
   }
 
-  token->string[i] = '\0';
+  token->string[count] = '\0';
   token->value = numDot == 0 ? atoi(token->string) : atof(token->string);
   return token;
 }
 
 Token *readConstChar(void)
 {
-  // currentChar = '
+  // currentChar = ' (CHAR_SINGLEQUOTE)
   Token *token = makeToken(TK_CHAR, lineNo, colNo);
 
   // Read the next char if the next char is EOF -> ERROR: ERR_INVALIDCHARCONSTANT
@@ -139,46 +143,45 @@ Token *readConstChar(void)
 
 Token *readConstString(void)
 {
-  Token *token;
-  char tmp[MAX_IDENT_LEN + 1];
-  int tmpLength = 0;
-  char ch;
-
-  tmp[0] = '\0';
+  // currentChar = " (CHAR_DOUBLEQUOTE)
+  Token *token = makeToken(TK_STRING, lineNo, colNo);
+  int ln = lineNo;
+  int cn = colNo;
+  // Read the next char if the next char is EOF -> ERROR: ERR_INVALIDCHARCONSTANT
   readChar();
-
-  while (currentChar != EOF && charCodes[currentChar] != CHAR_DOUBLEQUOTE)
+  if (currentChar == EOF)
   {
-    if (charCodes[currentChar] == CHAR_SLASH)
+    token->tokenType = TK_NONE;
+    error(ERR_INVALIDCHARCONSTANT, ln, cn);
+    return token;
+  }
+
+  int len = 0;
+  while (1)
+  {
+    token->string[len++] = (char)currentChar;
+    readChar();
+    if (charCodes[currentChar] == CHAR_DOUBLEQUOTE)
     {
+      token->string[len] = '\0';
       readChar();
+      return token;
     }
 
-    if (tmpLength >= MAX_IDENT_LEN)
+    if (charCodes[currentChar] == CHAR_SEMICOLON || currentChar == '\n')
     {
-      error(ERR_STRINGTOOLONG, lineNo, colNo);
-      return makeToken(TK_NONE, lineNo, colNo);
+      token->tokenType = TK_NONE;
+      error(ERR_ENDOFSTRING, ln, cn);
+      return token;
     }
 
-    ch = (char)currentChar;
-    strncat(tmp, &ch, 1);
-    tmpLength++;
-    readChar();
+    if (len > MAX_STRING_LENGTH)
+    {
+      token->tokenType = TK_NONE;
+      error(ERR_STRINGTOOLONG, ln, cn);
+      return token;
+    }
   }
-
-  if (charCodes[currentChar] == CHAR_DOUBLEQUOTE)
-  {
-    token = makeToken(TK_STRING, lineNo, colNo);
-    strcpy(token->string, tmp);
-    readChar();
-  }
-  else
-  {
-    token = makeToken(TK_NONE, lineNo, colNo);
-    error(ERR_ENDOFSTRING, lineNo, colNo);
-  }
-
-  return token;
 }
 
 Token *getToken(void)
@@ -186,9 +189,7 @@ Token *getToken(void)
   Token *token;
 
   if (currentChar == EOF)
-  {
     return makeToken(TK_EOF, lineNo, colNo);
-  }
 
   switch (charCodes[currentChar])
   {
@@ -201,6 +202,8 @@ Token *getToken(void)
     return readNumber();
   case CHAR_SINGLEQUOTE:
     return readConstChar();
+  case CHAR_DOUBLEQUOTE:
+    return readConstString();
 
   // Group 1: Symbols that have 1 case
   case CHAR_EQ: // "="
@@ -330,8 +333,6 @@ Token *getToken(void)
       return token;
     }
     break;
-  case CHAR_DOUBLEQUOTE:
-    return readConstString();
   default:
     token = makeToken(TK_NONE, lineNo, colNo);
     error(ERR_INVALIDSYMBOL, lineNo, colNo);
@@ -367,6 +368,9 @@ void printToken(Token *token)
   case TK_EOF:
     printf("TK_EOF\n");
     break;
+  case TK_FLOAT:
+    printf("TK_FLOAT(%s)\n", token->string);
+    break;
 
   case KW_PROGRAM:
     printf("KW_PROGRAM\n");
@@ -382,6 +386,9 @@ void printToken(Token *token)
     break;
   case KW_INTEGER:
     printf("KW_INTEGER\n");
+    break;
+  case KW_FLOAT:
+    printf("KW_FLOAT\n");
     break;
   case KW_CHAR:
     printf("KW_CHAR\n");
