@@ -553,78 +553,78 @@ int main(int argc, char *argv[])
 
 /******************************************************************/
 
-void scanAndWriteResult(int number, char *filePath, char *myResultPath)
-{
-  filePath[strlen(filePath) - 5] = number;
-  myResultPath[strlen(myResultPath) - 5] = number;
-  FILE *fp = freopen(myResultPath, "w", stdout);
-  scan(filePath);
-  fclose(fp);
-}
+// void scanAndWriteResult(int number, char *filePath, char *myResultPath)
+// {
+//   filePath[strlen(filePath) - 5] = number;
+//   myResultPath[strlen(myResultPath) - 5] = number;
+//   FILE *fp = freopen(myResultPath, "w", stdout);
+//   scan(filePath);
+//   fclose(fp);
+// }
 
-int compareLineByLine(char *fileName1, char *fileName2)
-{
-  FILE *file1 = fopen(fileName1, "r");
-  FILE *file2 = fopen(fileName2, "r");
-  if (file1 == NULL)
-  {
-    printf("Cannot open %s\n", fileName1);
-    return 0;
-  }
-  if (file2 == NULL)
-  {
-    printf("Cannot open %s\n", fileName2);
-    return 0;
-  }
+// int compareLineByLine(char *fileName1, char *fileName2)
+// {
+//   FILE *file1 = fopen(fileName1, "r");
+//   FILE *file2 = fopen(fileName2, "r");
+//   if (file1 == NULL)
+//   {
+//     printf("Cannot open %s\n", fileName1);
+//     return 0;
+//   }
+//   if (file2 == NULL)
+//   {
+//     printf("Cannot open %s\n", fileName2);
+//     return 0;
+//   }
 
-  int isEqual = 1;
-  char line1[1000];
-  char line2[1000];
+//   int isEqual = 1;
+//   char line1[1000];
+//   char line2[1000];
 
-  while (fgets(line1, 1000, file1) && fgets(line2, 1000, file2))
-  {
-    isEqual = strcmp(line1, line2) == 0;
-    if (!isEqual)
-    {
-      printf("%s%s -> Not Equal\n\n", line1, line2);
-    }
-  }
+//   while (fgets(line1, 1000, file1) && fgets(line2, 1000, file2))
+//   {
+//     isEqual = strcmp(line1, line2) == 0;
+//     if (!isEqual)
+//     {
+//       printf("%s%s -> Not Equal\n\n", line1, line2);
+//     }
+//   }
 
-  while (fgets(line1, 1000, file1))
-  {
-    printf("FILE1: %s FILE2: NULL\n -> Not Equal\n\n", line1);
-  }
-  while (fgets(line2, 1000, file2))
-  {
-    printf("FILE1: NULL FILE2: %s -> Not Equal\n\n", line2);
-  }
+//   while (fgets(line1, 1000, file1))
+//   {
+//     printf("FILE1: %s FILE2: NULL\n -> Not Equal\n\n", line1);
+//   }
+//   while (fgets(line2, 1000, file2))
+//   {
+//     printf("FILE1: NULL FILE2: %s -> Not Equal\n\n", line2);
+//   }
 
-  if (isEqual)
-    printf("__________SAME__________\n");
-  else
-    printf("__________NOT SAME__________\n");
+//   if (isEqual)
+//     printf("__________SAME__________\n");
+//   else
+//     printf("__________NOT SAME__________\n");
 
-  return isEqual;
-}
+//   return isEqual;
+// }
 
-int main(int argc, char *argv[])
-{
-  char myResultPath[] = "../test/myResult1.txt";
-  char filePath[] = "../test/example1.kpl";
-  char solutionPath[] = "../test/result1.txt";
+// int main(int argc, char *argv[])
+// {
+//   char myResultPath[] = "../test/myResult1.txt";
+//   char filePath[] = "../test/example1.kpl";
+//   char solutionPath[] = "../test/result1.txt";
 
-  for (char i = '7'; i <= '7'; i++)
-  {
-    scanAndWriteResult(i, filePath, myResultPath);
-  }
+//   for (char i = '7'; i <= '7'; i++)
+//   {
+//     scanAndWriteResult(i, filePath, myResultPath);
+//   }
 
-  for (char i = '1'; i <= '1'; i++)
-  {
-    myResultPath[strlen(myResultPath) - 5] = i;
-    solutionPath[strlen(solutionPath) - 5] = i;
+//   for (char i = '1'; i <= '1'; i++)
+//   {
+//     myResultPath[strlen(myResultPath) - 5] = i;
+//     solutionPath[strlen(solutionPath) - 5] = i;
 
-    printf("\nCompare %c\n", i);
-    compareLineByLine(myResultPath, solutionPath);
-  }
-  return 0;
-}
+//     printf("\nCompare %c\n", i);
+//     compareLineByLine(myResultPath, solutionPath);
+//   }
+//   return 0;
+// }

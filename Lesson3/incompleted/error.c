@@ -69,6 +69,12 @@ void error(ErrorCode err, int lineNo, int colNo)
   case ERR_INVALIDSTRING:
     printf("%d-%d:%s\n", lineNo, colNo, ERM_INVALIDSTRING);
     break;
+  case ERR_ENDOFSTRING:
+    printf("%d-%d:%s\n", lineNo, colNo, ERM_ENDOFSTRING);
+    break;
+  case ERR_STRINGTOOLONG:
+    printf("%d-%d:%s\n", lineNo, colNo, ERM_STRINGTOOLONG);
+    break;
   }
   exit(0);
 }

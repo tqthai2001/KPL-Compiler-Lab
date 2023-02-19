@@ -242,14 +242,17 @@ void compileType(void)
   case KW_INTEGER:
     eat(KW_INTEGER);
     break;
+  case KW_FLOAT:
+    eat(KW_FLOAT);
+    break;
   case KW_CHAR:
     eat(KW_CHAR);
     break;
   case KW_ARRAY:
     eat(KW_ARRAY);
-    eat(SB_LBRACKET);
+    eat(SB_LSEL);
     eat(TK_NUMBER);
-    eat(SB_RBRACKET);
+    eat(SB_RSEL);
     eat(KW_OF);
     compileType();
     break;
@@ -268,6 +271,9 @@ void compileBasicType(void)
   {
   case KW_INTEGER:
     eat(KW_INTEGER);
+    break;
+  case KW_FLOAT:
+    eat(KW_FLOAT);
     break;
   case KW_CHAR:
     eat(KW_CHAR);
@@ -373,7 +379,7 @@ void compileAssignSt(void)
 {
   assert("Parsing an assign statement ....");
   eat(TK_IDENT);
-  if (lookAhead->tokenType == SB_LBRACKET)
+  if (lookAhead->tokenType == SB_LSEL)
   {
     compileIndexes();
     eat(SB_ASSIGN);
@@ -382,9 +388,9 @@ void compileAssignSt(void)
   {
     eat(SB_ASSIGN_PLUS);
   }
-  else if (lookAhead->tokenType == SB_ASSIGN_SUBSTRACT)
+  else if (lookAhead->tokenType == SB_ASSIGN_SUBTRACT)
   {
-    eat(SB_ASSIGN_SUBSTRACT);
+    eat(SB_ASSIGN_SUBTRACT);
   }
   else if (lookAhead->tokenType == SB_ASSIGN_TIMES)
   {
@@ -487,7 +493,7 @@ void compileArguments(void)
   case SB_LT:
   case SB_GE:
   case SB_GT:
-  case SB_RBRACKET:
+  case SB_RSEL:
   case SB_SEMICOLON:
   case KW_END:
   case KW_ELSE:
@@ -593,8 +599,8 @@ void compileExpression3(void)
     compileTerm();
     compileExpression3();
     break;
-  case SB_MOD:
-    eat(SB_MOD);
+  case SB_MODUL:
+    eat(SB_MODUL);
     compileTerm();
     compileExpression3();
     break;
@@ -641,7 +647,7 @@ void compileTerm2(void)
     compileTerm2();
     break;
   // check the FOLLOW set
-  case SB_MOD:
+  case SB_MODUL:
   case SB_PLUS:
   case SB_MINUS:
   case KW_TO:
@@ -671,6 +677,9 @@ void compileFactor(void)
   {
   case TK_NUMBER:
     eat(TK_NUMBER);
+    break;
+  case TK_FLOAT:
+    eat(TK_FLOAT);
     break;
   case TK_CHAR:
     eat(TK_CHAR);
@@ -704,11 +713,11 @@ void compileFactor(void)
 
 void compileIndexes(void)
 {
-  while (lookAhead->tokenType == SB_LBRACKET)
+  while (lookAhead->tokenType == SB_LSEL)
   {
-    eat(SB_LBRACKET);
+    eat(SB_LSEL);
     compileExpression();
-    eat(SB_RBRACKET);
+    eat(SB_RSEL);
   }
 }
 

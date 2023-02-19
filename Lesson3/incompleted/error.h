@@ -29,6 +29,8 @@ typedef enum
   ERR_INVALIDVARDECL,
   ERR_INVALIDSUBDECL,
   ERR_INVALIDSTRING,
+  ERR_ENDOFSTRING,
+  ERR_STRINGTOOLONG
 } ErrorCode;
 
 #define ERM_ENDOFCOMMENT "End of comment expected!"
@@ -50,6 +52,8 @@ typedef enum
 #define ERM_INVALIDVARDECL "Invalid variable declaration!"
 #define ERM_INVALIDSUBDECL "Invalid subroutine declaration!"
 #define ERM_INVALIDSTRING "Invalid string!"
+#define ERM_ENDOFSTRING "End of string expected!"
+#define ERM_STRINGTOOLONG "String constant too long!"
 
 void error(ErrorCode err, int lineNo, int colNo);
 void missingToken(TokenType tokenType, int lineNo, int colNo);

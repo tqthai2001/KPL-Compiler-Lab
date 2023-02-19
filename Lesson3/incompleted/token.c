@@ -153,7 +153,7 @@ char *tokenToString(TokenType tokenType)
     return "\'*\'";
   case SB_SLASH:
     return "\'/\'";
-  case SB_MOD:
+  case SB_MODUL:
     return "\'%\'";
   case SB_LPAR:
     return "\'(\'";
