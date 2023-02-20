@@ -507,11 +507,11 @@ void compileAssignSt(void)
       error(ERR_STRING_USED, currentToken->lineNo, currentToken->colNo);
     eat(SB_ASSIGN_PLUS);
   }
-  else if (lookAhead->tokenType == SB_ASSIGN_SUBSTRACT)
+  else if (lookAhead->tokenType == SB_ASSIGN_SUBTRACT)
   {
     if (varType->typeClass == TP_STRING)
       error(ERR_STRING_USED, currentToken->lineNo, currentToken->colNo);
-    eat(SB_ASSIGN_SUBSTRACT);
+    eat(SB_ASSIGN_SUBTRACT);
   }
   else if (lookAhead->tokenType == SB_ASSIGN_TIMES)
   {
@@ -727,7 +727,7 @@ Type *compileExpression2(void)
 {
   Type *type;
   type = compileTerm();
-  if (lookAhead->tokenType == SB_MOD)
+  if (lookAhead->tokenType == SB_MODUL)
   {
     checkModulType(type);
   }
@@ -753,8 +753,8 @@ void compileExpression3(void)
     checkIntType(type);
     compileExpression3();
     break;
-  case SB_MOD:
-    eat(SB_MOD);
+  case SB_MODUL:
+    eat(SB_MODUL);
     type = compileTerm();
     // checkIntType(type);
     checkModulType(type);
@@ -813,7 +813,7 @@ void compileTerm2(void)
     compileTerm2();
     break;
     // check the FOLLOW set
-  case SB_MOD:
+  case SB_MODUL:
   case SB_PLUS:
   case SB_MINUS:
   case KW_TO:

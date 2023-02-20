@@ -122,6 +122,7 @@ Object *checkDeclaredLValueIdent(char *name)
 
   return obj;
 }
+
 void checkModulType(Type *type)
 {
   if ((type != NULL) && (type->typeClass == TP_INT))
@@ -177,7 +178,6 @@ void checkBasicType(Type *type)
 
 void checkArrayType(Type *type)
 {
-  // TODO
   if ((type != NULL) && (type->typeClass == TP_ARRAY))
     return;
   else
@@ -186,7 +186,6 @@ void checkArrayType(Type *type)
 
 void checkTypeEquality(Type *type1, Type *type2)
 {
-  // TODO
   if (type2->typeClass == TP_STRING && type1->typeClass == TP_STRING)
   {
     if (type2->arraySize >= type1->arraySize)
