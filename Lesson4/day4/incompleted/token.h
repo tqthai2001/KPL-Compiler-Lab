@@ -8,6 +8,7 @@
 #define __TOKEN_H__
 
 #define MAX_IDENT_LEN 999
+#define MAX_STRING_LENGTH 50
 #define KEYWORDS_COUNT 21
 
 typedef enum
@@ -61,18 +62,18 @@ typedef enum
   SB_RPAR,
   SB_LSEL,
   SB_RSEL,
+  SB_MODUL,
   SB_ASSIGN_PLUS,
-  SB_ASSIGN_SUBSTRACT,
+  SB_ASSIGN_SUBTRACT,
   SB_ASSIGN_TIMES,
   SB_ASSIGN_DIVIDE,
-  SB_MOD,
   SB_LBRACKET,
   SB_RBRACKET,
 } TokenType;
 
 typedef struct
 {
-  char string[MAX_IDENT_LEN + 1];
+  char string[MAX_STRING_LENGTH + 1];
   int lineNo, colNo;
   TokenType tokenType;
   int size;
