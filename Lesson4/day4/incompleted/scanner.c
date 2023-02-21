@@ -171,6 +171,7 @@ Token *readConstString(void)
     if (charCodes[currentChar] == CHAR_DOUBLEQUOTE)
     {
       token->string[len] = '\0';
+      token->size = len;
       readChar();
       return token;
     }

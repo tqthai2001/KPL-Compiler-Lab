@@ -105,6 +105,7 @@ void freeType(Type *type)
     free(type);
     break;
   case TP_ARRAY:
+  case TP_STRING:
     freeType(type->elementType);
     freeType(type);
     break;
