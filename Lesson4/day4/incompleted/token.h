@@ -73,7 +73,7 @@ typedef enum
 
 typedef struct
 {
-  char string[MAX_STRING_LENGTH + 1];
+  char string[MAX_IDENT_LEN + 1];
   int lineNo, colNo;
   TokenType tokenType;
   int size;

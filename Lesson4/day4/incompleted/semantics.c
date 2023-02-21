@@ -142,7 +142,7 @@ void checkForStType(Type *type)
 
 void checkIntType(Type *type)
 {
-  if ((type != NULL) && ((type->typeClass == TP_INT) || (type->typeClass == TP_FLOAT)))
+  if ((type != NULL) && (type->typeClass == TP_INT))
     return;
   else if (type->typeClass == TP_STRING)
     error(ERR_STRING_USED, currentToken->lineNo, currentToken->colNo);
@@ -150,9 +150,9 @@ void checkIntType(Type *type)
     error(ERR_TYPE_INCONSISTENCY, currentToken->lineNo, currentToken->colNo);
 }
 
-void checkFloatType(Type *type)
+void checkNumericType(Type *type)
 {
-  if ((type != NULL) && (type->typeClass == TP_FLOAT))
+  if ((type != NULL) && ((type->typeClass == TP_INT) || (type->typeClass == TP_FLOAT)))
     return;
   else if (type->typeClass == TP_STRING)
     error(ERR_STRING_USED, currentToken->lineNo, currentToken->colNo);
