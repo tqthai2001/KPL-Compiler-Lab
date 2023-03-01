@@ -1,0 +1,27 @@
+PROGRAM SUM_STUDENT_ID;
+VAR a: array (. 8 .) of integer;
+    i: integer;
+PROCEDURE setData;
+	BEGIN
+		a(. 0 .) := 2;
+		a(. 1 .) := 0;
+		a(. 2 .) := 1;
+		a(. 3 .) := 9;
+		a(. 4 .) := 4;
+		a(. 5 .) := 8;
+		a(. 6 .) := 3;
+		a(. 7 .) := 6;
+	END;
+FUNCTION sum : integer;
+ 	VAR t : integer;
+ 	BEGIN
+		t := 0;
+		FOR i := 0 TO 7 DO
+	  	BEGIN
+			t := t + a(. i .);
+	  	END
+	END;
+BEGIN
+	CALL setData;
+	CALL writei(sum);
+END.
